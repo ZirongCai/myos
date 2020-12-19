@@ -1,8 +1,9 @@
 
+#include "types.h"
 
 void printf(char* str)
 {
-	unsigned short* VideoMemory = (unsigned short*)0xb8000; // ADRESS OF graphics ram
+	static uint16_t* VideoMemory = (uint16_t*)0xb8000; // ADRESS OF graphics ram
 
 	for(int i=0; str[i] != '\0'; ++i)
 	{
@@ -10,9 +11,9 @@ void printf(char* str)
 	}
 }
 
-extern "C" void kernelMain(void* multiboot_structure, unsigned int magicnumber)
+extern "C" void kernelMain(void* multiboot_structure, uint32_t magicnumber)
 {
-	printf("Hello World!");
+	printf("Hello Zirong Cai!");
 	
 	while(1);
 
