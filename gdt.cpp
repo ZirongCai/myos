@@ -37,16 +37,16 @@ GlobalDescriptorTable::SegmentDescriptor::SegmentDescriptor(uint32_t base, uint3
 	uint8_t* target = (uint8_t*)this;
 	if(limit <= 65536) //16 bit
 	{
-		target[6] = 0x40;
+		target[6] = 0x40;// 4 is the flag
 	}
 	else
 	{
-		if((limit & 0xFFF) != 0xFFF)
+		if((limit & 0xFFF) != 0xFFF) //whether the last 12 bit of limit is all 1.
 			limit = (limit >>12)-1;
 		else
 			limit = limit >>12;
 
-		target[6] = 0xC0;
+		target[6] = 0xC0;// C is a flag;
 
 	}
 
