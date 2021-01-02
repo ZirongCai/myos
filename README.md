@@ -17,8 +17,9 @@ TODO: Fill out this long description.
 
 ## Background
 
-# Standard Readme Style Global
+### Global Descriptor Table
 
+When interrup occurs, some code should be executed. But the current process has no knowledge about the target adress. The GDT stores the target adress of every interrupt. 
 ## Usage
 
 ```
