@@ -9,13 +9,13 @@ TODO: Fill out this long description.
 
 ## Table of Contents
 
-- [Install](#install)
+- [Background](#background)
 - [Usage](#usage)
 - [Maintainers](#maintainers)
 - [Contributing](#contributing)
 - [License](#license)
 
-## Install
+## Background
 
 ```
 ```
