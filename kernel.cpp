@@ -55,20 +55,6 @@ extern "C" void kernelMain(void* multiboot_structure, uint32_t magicnumber)
 	asm("sti");
 	printf("Interrupt activated");
 	printf("Interrupt activated");
-	printf("Interrupt activated");
-	printf("Interrupt activated");
-	printf("Interrupt activated");
-	printf("Interrupt activated");
-	printf("Interrupt activated");
-	printf("Interrupt activated");
-	printf("Interrupt activated");
-	printf("Interrupt activated");
-	printf("Interrupt activated");
-	printf("Interrupt activated");
-	printf("Interrupt activated");
-	printf("Interrupt activated");
-	printf("Interrupt activated");
-
 	while(1);
 
 }
