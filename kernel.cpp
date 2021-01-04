@@ -46,6 +46,8 @@ extern "C" void kernelMain(void* multiboot_structure, uint32_t magicnumber)
 {
 	printf("Hello Zirong Cai!\n");
 	printf("Hello Zirong Cai!");
+
+
 	GlobalDescriptorTable gdt;
 	InterruptManager interrupts(&gdt);
 

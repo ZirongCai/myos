@@ -3,9 +3,11 @@
 #ifndef __INTERRUPTS_H
 #define __INTERRUPTS_H
 
-#include "types.h"
-#include "port.h"
-#include "gdt.h"
+    #include "types.h"
+    #include "port.h"
+    #include "gdt.h"
+
+
     class InterruptManager
     {
 
@@ -36,6 +38,15 @@
 		uint8_t DescriptorPrivilegeLevel,
 		uint8_t DescriptorType);
 
+
+	static uint32_t handleInterrupt(uint8_t interruptNumber, uint32_t esp);
+
+	static void IgnoreInterruptRequest();
+
+
+	static void HandleInterruptRequest0x00();    
+	static void HandleInterruptRequest0x01();    
+ 
 	Port8BitSlow picMasterCommand;
 	Port8BitSlow picMasterData;
 	Port8BitSlow picSlaveCommand;
@@ -49,12 +60,7 @@
 	void Activate();
 
 
-	static uint32_t handleInterrupt(uint8_t interruptNumber, uint32_t esp);
-
-	static void IgnoreInterruptRequest();
-	static void HandleInterruptRequest0x00();    
-	static void HandleInterruptRequest0x01();    
-    };
+   };
 
 
 #endif
