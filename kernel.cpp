@@ -51,7 +51,10 @@ extern "C" void kernelMain(void* multiboot_structure, uint32_t magicnumber)
 	GlobalDescriptorTable gdt;
 	InterruptManager interrupts(&gdt);
 
-	interrupts.Activate();
+//	interrupts.Activate();
+	asm("sti");
+	printf("Interrupt activated");
+
 	while(1);
 
 }
