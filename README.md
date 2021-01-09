@@ -72,6 +72,7 @@ I think the function of this code is to initialize the PIC and tell the PIC not 
 ### Interrupt Descriptor Table
 
 ![](./pictures/GDT-IDT-Handler.png)
+
 So basiclly, When an interrupt occurs, the CPU will take the address loaded in idtr(register) and find the coresponding handler of this interrupt in IDT, but in our case, since we have to store all the state of currently runing process, we can't directly go to the handler, but need to go interruptstus.s first. But then there is a problem, after we go into the interruptstus.s, we don't know the portnumber anymore, but we still need the portnumber to get the right handler. So we do it in stupid way: one handler for one interrupt.
 ```
 .macro HandleInterruptRequest num
