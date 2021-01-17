@@ -89,7 +89,7 @@ HandleInterruptRequest 0x01
 
 ### MouseDriver
 
-![](./pictures/mouse_datapacket)
+![](./pictures/mouse_datapacket.png)
 ``` https://courses.cs.washington.edu/courses/cse477/00sp/projectwebs/groupb/PS2-mouse/mouse.html ```
 
 As shown in the figure above, When the mouse is moved or pressed, it will send a 3-byte packet to mouse driver. And that explains the code following that confused me for a while:
