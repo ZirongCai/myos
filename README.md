@@ -98,6 +98,9 @@ Picture captured from:https://courses.cs.washington.edu/courses/cse477/00sp/proj
 As shown in the figure above, When the mouse is moved or pressed, it will send a 3-byte packet to mouse driver. And that explains the code following that confused me for a while:
 
 ```
+MouseDriver::HandleInterrupt(...)
+{
+    ...
     buffer[offset] = dataport.Read();
     offset = (offset + 1) % 3;
 
@@ -105,6 +108,8 @@ As shown in the figure above, When the mouse is moved or pressed, it will send a
     {
         ...
     }
+    ...
+}
 ```
 
 It means when a mouse interrupt occurs, the processor will land in MouseDriver.Handler function, but since the packet is 3-byte, the driver has to read data from the port 3 times bevor it starts to handle this interrupt. 
