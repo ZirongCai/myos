@@ -51,6 +51,10 @@ int main(int argc, const char * argv[]) {
 
 2.
 ```
+InterruptManager::InterruptManager(...)
+{
+    ...
+    
     picMasterCommand.Write(0x11);
     picSlaveCommand.Write(0x11);
 
@@ -65,6 +69,9 @@ int main(int argc, const char * argv[]) {
 
     picMasterData.Write(0x00);
     picSlaveData.Write(0x00);
+    
+    ...
+}
 ```
 
 I think the function of this code is to initialize the PIC and tell the PIC not to ignore the interrupt signal but send them to the CPU, but i am not sure coz this problem is too hardware. 
