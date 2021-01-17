@@ -89,6 +89,8 @@ HandleInterruptRequest 0x01
 
 ### MouseDriver
 
+![](./pictures/mouse_transmission.png)
+
 ![](./pictures/mouse_datapacket.png)
 ```Picture captured from: https://courses.cs.washington.edu/courses/cse477/00sp/projectwebs/groupb/PS2-mouse/mouse.html ```
 
