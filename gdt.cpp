@@ -8,9 +8,11 @@ codeSegmentSelector(0,64*1024*1024, 0x9A),
 dataSegmentSelector(0,64*1024*1024, 0x92)
 {
 	uint32_t i[2];
-	i[0] = (uint32_t)this;
-	i[1] = sizeof(GlobalDescriptorTable) << 16;
+	i[1] = (uint32_t)this; //base
+	i[0] = sizeof(GlobalDescriptorTable) << 16;// limit
 
+	//load the base address and limit of gdt into gdtr(register)
+	//the input of lgdt should be 6 bytes, lower 2 bytes for limits and higher 4 bytes for base. Since data is stored in Computer from low bits to high bits, (char* i + 2) = (high 2 bytes of i[0] and i[1]);
 	asm volatile("lgdt (%0)": :"p" (((uint8_t *) i)+2));
 
 
@@ -42,9 +44,13 @@ GlobalDescriptorTable::SegmentDescriptor::SegmentDescriptor(uint32_t base, uint3
 	else
 	{
 		if((limit & 0xFFF) != 0xFFF) //whether the last 12 bit of limit is all 1.
+		{
 			limit = (limit >>12)-1;
+		}
 		else
+		{
 			limit = limit >>12;
+		}
 
 		target[6] = 0xC0;// C is a flag;
 
