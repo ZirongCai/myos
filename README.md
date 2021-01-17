@@ -86,6 +86,27 @@ HandleInterruptRequest 0x00
 HandleInterruptRequest 0x01
 
 ```
+
+### MouseDriver
+
+![](./pictures/mouse_datapacket)
+``` https://courses.cs.washington.edu/courses/cse477/00sp/projectwebs/groupb/PS2-mouse/mouse.html ```
+
+As shown in the figure above, When the mouse is moved or pressed, it will send a 3-byte packet to mouse driver. And that explains the code following that confused me for a while:
+
+```
+    buffer[offset] = dataport.Read();
+    offset = (offset + 1) % 3;
+
+    if(offset == 0)
+    {
+        ...
+    }
+```
+
+It means when a mouse interrupt occurs, the processor will land in MouseDriver.Handler function, but since the packet is 3-byte, the driver has to read data from the port 3 times bevor it starts to handle this interrupt. 
+
+There is still one problem remain unsolved: In my opinion, an Interrupt signal can only forces the cpu to step into the Mouse Handle function once, which is absolutely wrong from the sight of the code(an Interrupt corresponds to 3 times function call), so maybe a mouse event will result in 3 interrupt impuls? 
 ## Usage
 
 ```
