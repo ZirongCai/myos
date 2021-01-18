@@ -140,9 +140,11 @@ Double quotes is for string and single quotes for character.
 ## ToolTricks
 
 - ***tricks of git***
--- to delete multiple files in repository
+1. to delete multiple files in repository
 ```git rm -r folder_name```
+
 ```git commit -m "Remove duplicated directory"```
+
 ```git push origin master```
 
 - ***tricks of vim***
