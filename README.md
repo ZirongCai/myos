@@ -10,7 +10,7 @@ TODO: Fill out this long description.
 ## Table of Contents
 
 - [Background](#background)
-- [Problem Collection](#Problem Collection)
+- [ProblemCollection](#ProblemCollection)
 - [Maintainers](#maintainers)
 - [Contributing](#contributing)
 - [License](#license)
@@ -41,10 +41,63 @@ _ZN16InterruptManager26HandleInterruptRequest\num\()Ev:
 
 HandleInterruptRequest 0x00
 HandleInterruptRequest 0x01
+...
 
 ```
 
-### MouseDriver
+
+## Problem Collection
+
+-"asm volatile" and lgdt
+```
+    asm volatile("lgdt (%0)": :"p" (((uint8_t *) i)+2));
+```
+
+LGDT: Loads the values in the source operand into the global descriptor table register (GDTR) or the interrupt descriptor table register (IDTR). The source operand specifies a 6-byte memory location that contains the base address (a linear address) and the limit (size of table in bytes) of the global descriptor table (GDT) or the interrupt descriptor table (IDT). If operand-size attribute is 32 bits, a 16-bit limit (lower 2 bytes of the 6-byte data operand) and a 32-bit base address (upper 4 bytes of the data operand) are loaded into the register. If the operand-size attribute is 16 bits, a 16-bit limit (lower 2 bytes) and a 24-bit base address (third, fourth, and fifth byte) are loaded. Here, the high-order byte of the operand is not used and the high-order byte of the base address in the GDTR or IDTR is filled with zeros.
+
+Consider the following function
+
+```
+int main(int argc, const char * argv[]) {
+    // insert code here...
+
+    unsigned int i[2];
+    i[0] = 0x41424344;
+    i[1] = 0x45464748;
+
+    cout<<((unsigned char *)i+2)<<endl;
+    return 0;
+}
+```
+
+-Communicate with Pic
+```
+InterruptManager::InterruptManager(...)
+{
+    ...
+    
+    picMasterCommand.Write(0x11);
+    picSlaveCommand.Write(0x11);
+
+    picMasterData.Write(0x20);
+    picSlaveData.Write(0x28);
+
+    picMasterData.Write(0x04);
+    picSlaveData.Write(0x02);
+
+    picMasterData.Write(0x01);
+    picSlaveData.Write(0x01);
+
+    picMasterData.Write(0x00);
+    picSlaveData.Write(0x00);
+    
+    ...
+}
+```
+
+I think the function of this code is to initialize the PIC and tell the PIC not to ignore the interrupt signal but send them to the CPU, but i am not sure coz this problem is too hardware. 
+
+-Data packets of Mouse
 
 ![](./pictures/mouse_transmission.png)
 
@@ -72,58 +125,9 @@ MouseDriver::HandleInterrupt(...)
 It means when a mouse interrupt occurs, the processor will land in MouseDriver.Handler function, but since the packet is 3-byte, the driver has to read data from the port 3 times bevor it starts to handle this interrupt. 
 
 There is still one problem remain unsolved: In my opinion, an Interrupt signal can only forces the cpu to step into the Mouse Handle function once, which is absolutely wrong from the sight of the code(an Interrupt corresponds to 3 times function call), so maybe a mouse event will result in 3 interrupt impuls? 
-## Problem Collection
 
--
-```
-    asm volatile("lgdt (%0)": :"p" (((uint8_t *) i)+2));
-```
+-extern keyword
 
-```
-LGDT:Loads the values in the source operand into the global descriptor table register (GDTR) or the interrupt descriptor table register (IDTR). The source operand specifies a 6-byte memory location that contains the base address (a linear address) and the limit (size of table in bytes) of the global descriptor table (GDT) or the interrupt descriptor table (IDT). If operand-size attribute is 32 bits, a 16-bit limit (lower 2 bytes of the 6-byte data operand) and a 32-bit base address (upper 4 bytes of the data operand) are loaded into the register. If the operand-size attribute is 16 bits, a 16-bit limit (lower 2 bytes) and a 24-bit base address (third, fourth, and fifth byte) are loaded. Here, the high-order byte of the operand is not used and the high-order byte of the base address in the GDTR or IDTR is filled with zeros.
-```
-
-Consider the following function
-
-```
-int main(int argc, const char * argv[]) {
-    // insert code here...
-
-    unsigned int i[2];
-    i[0] = 0x41424344;
-    i[1] = 0x45464748;
-
-    cout<<((unsigned char *)i+2)<<endl;
-    return 0;
-}
-```
-
--
-```
-InterruptManager::InterruptManager(...)
-{
-    ...
-    
-    picMasterCommand.Write(0x11);
-    picSlaveCommand.Write(0x11);
-
-    picMasterData.Write(0x20);
-    picSlaveData.Write(0x28);
-
-    picMasterData.Write(0x04);
-    picSlaveData.Write(0x02);
-
-    picMasterData.Write(0x01);
-    picSlaveData.Write(0x01);
-
-    picMasterData.Write(0x00);
-    picSlaveData.Write(0x00);
-    
-    ...
-}
-```
-
-I think the function of this code is to initialize the PIC and tell the PIC not to ignore the interrupt signal but send them to the CPU, but i am not sure coz this problem is too hardware. 
 
 ## Maintainers
 
