@@ -46,9 +46,9 @@ HandleInterruptRequest 0x01
 ```
 
 
-## Problem Collection
+## ProblemCollection
 
--"asm volatile" and lgdt
+- "asm volatile" and lgdt
 ```
     asm volatile("lgdt (%0)": :"p" (((uint8_t *) i)+2));
 ```
@@ -70,7 +70,7 @@ int main(int argc, const char * argv[]) {
 }
 ```
 
--Communicate with Pic
+- Communicate with Pic
 ```
 InterruptManager::InterruptManager(...)
 {
@@ -97,7 +97,7 @@ InterruptManager::InterruptManager(...)
 
 I think the function of this code is to initialize the PIC and tell the PIC not to ignore the interrupt signal but send them to the CPU, but i am not sure coz this problem is too hardware. 
 
--Data packets of Mouse
+- Data packets of Mouse
 
 ![](./pictures/mouse_transmission.png)
 
@@ -126,7 +126,7 @@ It means when a mouse interrupt occurs, the processor will land in MouseDriver.H
 
 There is still one problem remain unsolved: In my opinion, an Interrupt signal can only forces the cpu to step into the Mouse Handle function once, which is absolutely wrong from the sight of the code(an Interrupt corresponds to 3 times function call), so maybe a mouse event will result in 3 interrupt impuls? 
 
--extern keyword
+- extern keyword
 
 
 ## Maintainers
