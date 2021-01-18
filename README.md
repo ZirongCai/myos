@@ -11,7 +11,7 @@ TODO: Fill out this long description.
 
 - [Background](#background)
 - [ProblemCollection](#ProblemCollection)
-- [Maintainers](#maintainers)
+- [ToolTricks](#ToolTricks)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -127,11 +127,25 @@ It means when a mouse interrupt occurs, the processor will land in MouseDriver.H
 There is still one problem remain unsolved: In my opinion, an Interrupt signal can only forces the cpu to step into the Mouse Handle function once, which is absolutely wrong from the sight of the code(an Interrupt corresponds to 3 times function call), so maybe a mouse event will result in 3 interrupt impuls? 
 
 - ***extern keyword***
+![](./pictures/externKeyword.png)
+First of all, in a C/C++ programm, **function is valid everywhere!!**. e.g., a function **void f1();** is defined in main.c, it can also be used in file.c as long as they are linked together. Recall that functions are labels in assembly, which also explained this.
+
+What about variables?
+
+- ***difference between "" and ''***
+Double quotes is for string and single quotes for character. 
 
 
-## Maintainers
 
-[@ZirongCai](https://github.com/ZirongCai)
+## ToolTricks
+
+- ***tricks of git***
+-- to delete multiple files in repository
+```git rm -r folder_name```
+```git commit -m "Remove duplicated directory"```
+```git push origin master```
+
+- ***tricks of vim***
 
 ## Contributing
 
