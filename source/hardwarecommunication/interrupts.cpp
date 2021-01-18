@@ -1,5 +1,7 @@
 
-#include "interrupts.h"
+#include <hardwarecommunication/interrupts.h>
+using namespace myos::common;
+using namespace myos::hardwarecommunication;
 
 void printf(char* str);
 
@@ -17,7 +19,7 @@ InterruptHandler::InterruptHandler(uint8_t interruptNumber, InterruptManager* in
 InterruptHandler::~InterruptHandler()
 {
     if(interruptManager->handlers[interruptNumber] == this)
-       interruptManager->handlers[interruptNumber] = 0; 
+        interruptManager->handlers[interruptNumber] = 0; 
 }
 
 uint32_t InterruptHandler::HandleInterrupt(uint32_t esp)
@@ -36,15 +38,15 @@ uint32_t InterruptHandler::HandleInterrupt(uint32_t esp)
 InterruptManager::GateDescriptor InterruptManager::interruptDescriptorTable[256];
 
 InterruptManager* InterruptManager::ActiveInterruptManager = 0;
- 
+
 void InterruptManager::SetInterruptDescriptorTableEntry(
-		uint8_t interruptNumber,
-		uint16_t codeSegmentSelectorOffset,
-		void(*handler)(),
-		uint8_t DescriptorPrivilegeLevel,
-		uint8_t DescriptorType) 
+        uint8_t interruptNumber,
+        uint16_t codeSegmentSelectorOffset,
+        void(*handler)(),
+        uint8_t DescriptorPrivilegeLevel,
+        uint8_t DescriptorType) 
 {
-    
+
     const uint8_t IDT_DESC_PRESENT = 0x80;
 
     interruptDescriptorTable[interruptNumber].handlerAddressLowBits = ((uint32_t)handler) & 0xFFFF;
@@ -57,10 +59,10 @@ void InterruptManager::SetInterruptDescriptorTableEntry(
 
 
 InterruptManager::InterruptManager(GlobalDescriptorTable* gdt)
-: picMasterCommand(0x20),
-  picMasterData(0x21),
-  picSlaveCommand(0xA0),
-  picSlaveData(0xA1)
+    : picMasterCommand(0x20),
+    picMasterData(0x21),
+    picSlaveCommand(0xA0),
+    picSlaveData(0xA1)
 {
     uint16_t CodeSegment = gdt->CodeSegmentSelector();
 
@@ -70,7 +72,7 @@ InterruptManager::InterruptManager(GlobalDescriptorTable* gdt)
     for(uint16_t i =0; i < 256; i++)
     {	
         handlers[i] = 0;    
-	    SetInterruptDescriptorTableEntry(i, CodeSegment, &IgnoreInterruptRequest, 0, IDT_INTERRUPT_GATE);
+        SetInterruptDescriptorTableEntry(i, CodeSegment, &IgnoreInterruptRequest, 0, IDT_INTERRUPT_GATE);
     }
 
     SetInterruptDescriptorTableEntry(0x20, CodeSegment, &HandleInterruptRequest0x00, 0, IDT_INTERRUPT_GATE);
@@ -110,8 +112,8 @@ InterruptManager::~InterruptManager()
 void InterruptManager::Activate()
 {
     if(ActiveInterruptManager != 0)
-	    ActiveInterruptManager->Deactivate(); 
-    
+        ActiveInterruptManager->Deactivate(); 
+
     ActiveInterruptManager = this;
     asm("sti"); // enable all hardware interrupts
 }
@@ -130,7 +132,7 @@ uint32_t InterruptManager:: handleInterrupt(uint8_t interruptNumber, uint32_t es
 
     if(ActiveInterruptManager != 0)
     {
-    	return ActiveInterruptManager->DoHandleInterrupt(interruptNumber, esp); 
+        return ActiveInterruptManager->DoHandleInterrupt(interruptNumber, esp); 
     }
     return esp;
 }
@@ -153,11 +155,11 @@ uint32_t InterruptManager:: DoHandleInterrupt(uint8_t interruptNumber, uint32_t 
 
     if(0x20 <= interruptNumber && interruptNumber < 0x30)
     {
-    	picMasterCommand.Write(0x20);
-	    if(0x28 <= interruptNumber)
-	        picSlaveCommand.Write(0x20);
+        picMasterCommand.Write(0x20);
+        if(0x28 <= interruptNumber)
+            picSlaveCommand.Write(0x20);
     }
-       
+
     return esp;
 }
 

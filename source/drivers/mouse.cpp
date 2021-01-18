@@ -1,6 +1,9 @@
 
-#include "mouse.h"
+#include <drivers/mouse.h>
 
+using namespace myos::common;
+using namespace myos::drivers;
+using namespace myos::hardwarecommunication;
 
 MouseEventHandler::MouseEventHandler()
 {
@@ -30,9 +33,9 @@ void MouseEventHandler::OnMouseMove(int x, int y)
 
 
 MouseDriver::MouseDriver(InterruptManager* manager, MouseEventHandler* handler)
-: InterruptHandler(0x2C, manager),
-dataport(0x60),
-commandport(0x64)
+    : InterruptHandler(0x2C, manager),
+    dataport(0x60),
+    commandport(0x64)
 {
     this->handler = handler;
 }
@@ -47,8 +50,8 @@ void MouseDriver::Activate()
 {
     offset = 0;
     buttons = 0;
-    
-	handler->OnMouseMove(0,0);  
+
+    handler->OnMouseMove(0,0);  
 
     commandport.Write(0xA8); // activate interrupts
     commandport.Write(0x20); // command 0x20 = read controller command byte
@@ -85,7 +88,7 @@ uint32_t MouseDriver::HandleInterrupt(uint32_t esp)
         }
         buttons = buffer[0];
     }
-return esp;
+    return esp;
 }
 
 

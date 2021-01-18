@@ -1,86 +1,93 @@
 
 
-#ifndef __INTERRUPTS_H
-#define __INTERRUPTS_H
+#ifndef __MYOS__HARDWARECOMMUNICATION__INTERRUPTMANAGER_H
+#define __MYOS__HARDWARECOMMUNICATION__INTERRUPTMANAGER_H
 
-    #include "types.h"
-    #include "port.h"
-    #include "gdt.h"
 
-    class InterruptManager;
+#include <common/types.h>
+#include <hardwarecommunication/port.h>
+#include <gdt.h>
 
-    class InterruptHandler
+
+namespace myos
+{
+    namespace hardwarecommunication
     {
-    protected:
-        uint8_t interruptNumber;
-        InterruptManager* interruptManager;
+        class InterruptManager;
 
-        InterruptHandler(uint8_t interruptNumber, InterruptManager* interruptManager);
-        ~InterruptHandler();
-    public:
-        virtual uint32_t HandleInterrupt(uint32_t esp);
+        class InterruptHandler
+        {
+            protected:
+                myos::common::uint8_t interruptNumber;
+                InterruptManager* interruptManager;
 
-    };
+                InterruptHandler(myos::common::uint8_t interruptNumber, InterruptManager* interruptManager);
+                ~InterruptHandler();
+            public:
+                virtual myos::common::uint32_t HandleInterrupt(myos::common::uint32_t esp);
 
-    class InterruptManager
-    {
-    friend class InterruptHandler;
+        };
 
-    protected:
+        class InterruptManager
+        {
+            friend class InterruptHandler;
 
-	static InterruptManager* ActiveInterruptManager;
-    InterruptHandler* handlers[256];
+            protected:
 
-    	struct GateDescriptor
- 	{
-	    uint16_t handlerAddressLowBits;
-	    uint16_t gdt_codeSegmentSelector;
-	    uint8_t reserved;
-  	    uint8_t access;
-	    uint16_t handlerAddressHighBits;
-	} __attribute__((packed));
+            static InterruptManager* ActiveInterruptManager;
+            InterruptHandler* handlers[256];
 
-	static GateDescriptor interruptDescriptorTable[256];
-    
-	struct InterruptDescriptorTablePointer
-	{
-	    uint16_t size;
-	    uint32_t base;
-	} __attribute__((packed));// forbid structure padding, i.e., no meaningless bytes inserted.
+            struct GateDescriptor
+            {
+                myos::common::uint16_t handlerAddressLowBits;
+                myos::common::uint16_t gdt_codeSegmentSelector;
+                myos::common::uint8_t reserved;
+                myos::common::uint8_t access;
+                myos::common::uint16_t handlerAddressHighBits;
+            } __attribute__((packed));
 
+            static GateDescriptor interruptDescriptorTable[256];
 
-	static void SetInterruptDescriptorTableEntry(
-		uint8_t interruptNumber,
-		uint16_t codeSegmentSelectorOffset,
-		void(*handler)(),
-		uint8_t DescriptorPrivilegeLevel,
-		uint8_t DescriptorType
-	);
+            struct InterruptDescriptorTablePointer
+            {
+                myos::common::uint16_t size;
+                myos::common::uint32_t base;
+            } __attribute__((packed));// forbid structure padding, i.e., no meaningless bytes inserted.
 
 
-    public:
-
-	InterruptManager(GlobalDescriptorTable* gdt);
-	~InterruptManager();
-
-	void Activate();
-	void Deactivate();
-	static uint32_t handleInterrupt(uint8_t interruptNumber, uint32_t esp);
-	uint32_t DoHandleInterrupt(uint8_t interruptNumber, uint32_t esp);
-
-	static void IgnoreInterruptRequest();
-
-	static void HandleInterruptRequest0x00();    
-	static void HandleInterruptRequest0x01();    
-	static void HandleInterruptRequest0x0C();    
- 
-	Port8BitSlow picMasterCommand;
-	Port8BitSlow picMasterData;
-	Port8BitSlow picSlaveCommand;
-	Port8BitSlow picSlaveData;
+            static void SetInterruptDescriptorTableEntry(
+                    myos::common::uint8_t interruptNumber,
+                    myos::common::uint16_t codeSegmentSelectorOffset,
+                    void(*handler)(),
+                    myos::common::uint8_t DescriptorPrivilegeLevel,
+                    myos::common::uint8_t DescriptorType
+                    );
 
 
-   };
+            public:
+
+            InterruptManager(myos::GlobalDescriptorTable* gdt);
+            ~InterruptManager();
+
+            void Activate();
+            void Deactivate();
+            static myos::common::uint32_t handleInterrupt(myos::common::uint8_t interruptNumber, myos::common::uint32_t esp);
+            myos::common::uint32_t DoHandleInterrupt(myos::common::uint8_t interruptNumber, myos::common::uint32_t esp);
+
+            static void IgnoreInterruptRequest();
+
+            static void HandleInterruptRequest0x00();    
+            static void HandleInterruptRequest0x01();    
+            static void HandleInterruptRequest0x0C();    
+
+            Port8BitSlow picMasterCommand;
+            Port8BitSlow picMasterData;
+            Port8BitSlow picSlaveCommand;
+            Port8BitSlow picSlaveData;
 
 
+        };
+
+    }
+}
 #endif

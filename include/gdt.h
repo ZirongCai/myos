@@ -1,38 +1,42 @@
 
-#ifndef __GDT_H
-#define __GDT_H
+#ifndef __MYOS__GDT_H
+#define __MYOS__GDT_H
 
-#include "types.h"
+#include <common/types.h>
 
-  class GlobalDescriptorTable
-  {
-     public:
-	class SegmentDescriptor
-	{
-	  private:
-		uint16_t limit_lo;
-		uint16_t base_lo;
-		uint8_t base_hi;
-		uint8_t type;
-		uint8_t flags_limit_hi;
-		uint8_t base_vhi;
-	  public:
-		SegmentDescriptor(uint32_t base, uint32_t limit, uint8_t type);
-		uint32_t Base();
-		uint32_t Limit();
-	} __attribute__((packed));
+namespace myos
+{
+    class GlobalDescriptorTable
+    {
+        public:
+            class SegmentDescriptor
+            {
+                private:
+                    myos::common::uint16_t limit_lo;
+                    myos::common::uint16_t base_lo;
+                    myos::common::uint8_t base_hi;
+                    myos::common::uint8_t type;
+                    myos::common::uint8_t flags_limit_hi;
+                    myos::common::uint8_t base_vhi;
+                public:
+                    SegmentDescriptor(myos::common::uint32_t base, myos::common::uint32_t limit, myos::common::uint8_t type);
+                    myos::common::uint32_t Base();
+                    myos::common::uint32_t Limit();
+            } __attribute__((packed));
 
 
-       SegmentDescriptor nullSegmentSelector;
-       SegmentDescriptor unusedSegmentSelector;
-       SegmentDescriptor codeSegmentSelector;
-       SegmentDescriptor dataSegmentSelector;
+            SegmentDescriptor nullSegmentSelector;
+            SegmentDescriptor unusedSegmentSelector;
+            SegmentDescriptor codeSegmentSelector;
+            SegmentDescriptor dataSegmentSelector;
 
-     public:
-    	GlobalDescriptorTable();
-	~GlobalDescriptorTable();
-	
-	uint16_t CodeSegmentSelector();//offset of the Code Segment
-	uint16_t DataSegmentSelector();
-  };	
+        public:
+            GlobalDescriptorTable();
+            ~GlobalDescriptorTable();
+
+            myos::common::uint16_t CodeSegmentSelector();//offset of the Code Segment
+            myos::common::uint16_t DataSegmentSelector();
+    };	
+}
+
 #endif

@@ -1,5 +1,9 @@
 
-#include "keyboard.h"
+#include <drivers/keyboard.h>
+
+using namespace myos::common;
+using namespace myos::drivers;
+using namespace myos::hardwarecommunication;
 
 
 KeyboardEventHandler::KeyboardEventHandler()
@@ -18,9 +22,9 @@ void KeyboardEventHandler::OnKeyUp(char)
 
 
 KeyboardDriver::KeyboardDriver(InterruptManager* manager, KeyboardEventHandler* handler)
-: InterruptHandler(0x21, manager),
-dataport(0x60),
-commandport(0x64)
+    : InterruptHandler(0x21, manager),
+    dataport(0x60),
+    commandport(0x64)
 {
     this->handler = handler;
 }
@@ -111,15 +115,15 @@ uint32_t KeyboardDriver::HandleInterrupt(uint32_t esp)
         case 0x3A: Shift = !Shift; break;
         case 0xFA: case 0x45: case 0xC5: break; //some other signals.
         default:
-            if(key < 0x80) //release signal >=0x80,press signal < 0x80
-            {
-                char* foo = "KEYBOARD 0x00";
-                char* hex = "0123456789ABCDEF";
-                foo[11] = hex[(key >> 4) & 0x0F];
-                foo[12] = hex[key & 0x0F];
-                printf(foo);
-            }
-            break;
+                                         if(key < 0x80) //release signal >=0x80,press signal < 0x80
+                                         {
+                                             char* foo = "KEYBOARD 0x00";
+                                             char* hex = "0123456789ABCDEF";
+                                             foo[11] = hex[(key >> 4) & 0x0F];
+                                             foo[12] = hex[key & 0x0F];
+                                             printf(foo);
+                                         }
+                                         break;
     }
     return esp;
 }
