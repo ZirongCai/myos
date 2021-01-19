@@ -218,17 +218,34 @@ When the code is included again, the first ifndef fails, resulting in a blank fi
 That prevents double declaration of any identifiers such as types, enums and static variables.
 
 - ***include "" Vs. include <> ***
+
 In practice, the difference is in the location where the preprocessor searches for the included file.
 
-For include <filename> the preprocessor searches in an implementation dependent manner, normally in search directories pre-designated by the compiler/IDE. This method is normally used to include standard library header files.
+For #include <> the preprocessor searches in an implementation dependent manner, normally in search directories pre-designated by the compiler/IDE. This method is normally used to include standard library header files.
 
-For #include "filename" the preprocessor searches first in the same directory as the file containing the directive, and then follows the search path used for the #include <filename> form. This method is normally used to include programmer-defined header files.
+For #include "" the preprocessor searches first in the same directory as the file containing the directive, and then follows the search path used for the #include <filename> form. This method is normally used to include programmer-defined header files.
     
+Note: We use **-Iinclude** option in g++ so it will search the files in /include directory.
+
+- ***.extern and .global in aseembly***
+
+The 'extern' directive tells the assembler that a particular label won't be found in the current source file and that is must be declared as a 'global' elsewhere. It's the job of the linker to resolve the connection between the reference to the extern label and its global declaration.
+
+The 'global' directive indicates that a label can be shared by files other than the one in which it's defined. (Without the 'global' directive, a label can only be used within the file in which it's been defined.)
+
+One big advantage to explicitly identifying global's and extern's is that you can use the same names for labels in multiple source modules and not have them interfere with each other. You also gain control of access to variables and subroutines from outside of the source file to minimize side effects between different modules.
+
+Question: In a C programm, if i define a function f1() in main.c, i can use it in other files like file1.c without using keyword global and extern, **because the compiler will link this two file together and so f1() is valid for all file in this programm, right?** But since we also link the interruptstus.s and kernel.cpp together, why muss we extern the Interrupthandler function in interruptstus.s ???
+
+
 
 
 ## ToolTricks
 
 - ***tricks of git***
+
+Book:http://git-scm.com/book/en/v2
+
 1. to delete multiple files in repository
 
 ```git rm -r folder_name```
@@ -237,13 +254,43 @@ For #include "filename" the preprocessor searches first in the same directory as
 
 ```git push origin master```
 
+2. pull force
+
+    https://www.freecodecamp.org/news/git-pull-force-how-to-overwrite-local-changes-with-git/
+    
+3. Undo  Revert commit
+
+    https://sethrobertson.github.io/GitFixUm/fixup.html#uncommitted_everything
+    
+    https://stackoverflow.com/questions/4114095/how-do-i-revert-a-git-repository-to-a-previous-commit
+
 - ***tricks of vim***
+
+1. Replace and Substitue
+
+    https://vim.fandom.com/wiki/Search_and_replace
+    
+2. automatic alignment
+
+    ```gg=G```
+
+
+- ***tricks of make***
+
+https://www.gnu.org/software/make/manual/make.html#Variables-Simplify
+
+https://swcarpentry.github.io/make-novice/reference.html
+
+
+
 
 ## Contributing
 
 PRs accepted.
 
 Small note: If editing the README, please conform to the [standard-readme](https://github.com/RichardLitt/standard-readme) specification.
+
+
 
 ## License
 
