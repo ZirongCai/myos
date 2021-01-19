@@ -133,14 +133,98 @@ First of all, in a C/C++ programm, **function is valid everywhere!!**. e.g., a f
 What about variables?
 
 - ***difference between "" and ''***
-Double quotes is for string and single quotes for character. 
+Double quotes is for string and single quotes for character. I have met an interesting bug because of this difference.
 
+```
+ 52         void OnKeyDown(char c)                                              
+ 53         {
+ 54             char* foo = " ";
+ 55             foo[0] = c;
+ 56             printf(foo);
+ 57         }
+```
+
+in the code above, i wrongly wrote **foo = "";**, and after that everytime i pressed a keyboard, it will print **key+Hello World**, because the end descriptor of a string '\0' is replaced by character c and thus printf won't stop reading memory. But what surprised me is that, right behind the character, is the memory for "Hello World" that used in **kernelMain**, i think it's stored in Stack, but ***will it not be deleted?***
+
+- ***Virtual Keyworad***
+Rules for Virtual Functions
+
+1. Virtual functions cannot be static and also cannot be a friend function of another class.
+2. Virtual functions should be **accessed using pointer or reference** of base class type to achieve run time polymorphism.
+3. The **prototype of virtual functions should be same** in base as well as derived class.
+4. They are always defined in base class and overridden in derived class. It is not mandatory for derived class to override (or re-define the virtual function),     in that case base class version of function is used.
+5. A class may have virtual destructor but it cannot have a virtual constructor.
+
+e.g.:
+
+```
+// CPP program to illustrate 
+// concept of Virtual Functions 
+  
+#include <iostream> 
+using namespace std; 
+  
+class base { 
+public: 
+    virtual void print() 
+    { 
+        cout << "print base class" << endl; 
+    } 
+  
+    void show() 
+    { 
+        cout << "show base class" << endl; 
+    } 
+}; 
+  
+class derived : public base { 
+public: 
+    void print() 
+    { 
+        cout << "print derived class" << endl; 
+    } 
+  
+    void show() 
+    { 
+        cout << "show derived class" << endl; 
+    } 
+}; 
+  
+int main() 
+{ 
+    base* bptr; 
+    derived d; 
+    bptr = &d; 
+  
+    // virtual function, binded at runtime 
+    bptr->print(); 
+  
+    // Non-virtual function, binded at compile time 
+    bptr->show(); 
+} 
+```
+
+Output:
+```
+print derived class
+show base class
+```
+- ***ifndef-define-endif***
+https://en.wikipedia.org/wiki/Include_guard
+
+Those are called #include guards.
+Once the header is included, it checks if a unique value (in this case HEADERFILE_H) is defined. Then if it's not defined, it defines it and continues to the rest of the page.
+When the code is included again, the first ifndef fails, resulting in a blank file.
+That prevents double declaration of any identifiers such as types, enums and static variables.
+
+- ***include "" Vs. include <> ***
 
 
 ## ToolTricks
 
 - ***tricks of git***
 1. to delete multiple files in repository
+
 ```git rm -r folder_name```
 
 ```git commit -m "Remove duplicated directory"```
