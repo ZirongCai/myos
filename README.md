@@ -17,6 +17,10 @@ TODO: Fill out this long description.
 
 ## Background
 
+### Constructure
+
+![](./pictures/Myos.png)
+
 ### Global Descriptor Table
 
 xxxxx(When interrup occurs, some code should be executed. But the current process has no knowledge about the target adress. The GDT stores the target adress of every interrupt.)xxxxx 
