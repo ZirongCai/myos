@@ -218,6 +218,12 @@ When the code is included again, the first ifndef fails, resulting in a blank fi
 That prevents double declaration of any identifiers such as types, enums and static variables.
 
 - ***include "" Vs. include <> ***
+In practice, the difference is in the location where the preprocessor searches for the included file.
+
+For include <filename> the preprocessor searches in an implementation dependent manner, normally in search directories pre-designated by the compiler/IDE. This method is normally used to include standard library header files.
+
+For #include "filename" the preprocessor searches first in the same directory as the file containing the directive, and then follows the search path used for the #include <filename> form. This method is normally used to include programmer-defined header files.
+    
 
 
 ## ToolTricks
