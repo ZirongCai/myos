@@ -54,9 +54,11 @@ HandleInterruptRequest 0x01
 In short, we don't want CPU to waste time on check the status of all port. So PIC is invented. When a Hardware has some data that need to be processed, then it will send a corresponding IRQ number to PIC, and in PIC we can programm for each IRQ, which interruptnumber in IDT it should refer to. 
 
 
-more details see :  http://www.lowlevel.eu/wiki/PIC_Tutorial
+more details see : 
 
-                    http://www.lowlevel.eu/wiki/Programmable_Interrupt_Controller#Initialisierung
+http://www.lowlevel.eu/wiki/PIC_Tutorial
+
+http://www.lowlevel.eu/wiki/Programmable_Interrupt_Controller#Initialisierung
 
 
 ## ProblemCollection
