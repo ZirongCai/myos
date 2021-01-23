@@ -52,6 +52,7 @@ HandleInterruptRequest 0x01
 ### Programmable Interrupt Comtroller (PIC)
 
 In short, we don't want CPU to waste time on check the status of all port. So PIC is invented. When a Hardware has some data that need to be processed, then it will send a corresponding IRQ number to PIC, and in PIC we can programm for each IRQ, which interruptnumber in IDT it should refer to. 
+（例： 键盘的A键被摁了，则键盘会产生一个interrupt signal 带着对应的IRQ Number去pic,然后pic进行判定这个IRQ的优先度，需要被处理的话就把会到这个IRQ对应的interruptnumber给CPU，CPU去IDT里找对应的Interrupt处理函数。）
 
 
 more details see : 
