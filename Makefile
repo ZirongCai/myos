@@ -9,23 +9,11 @@ objects = obj/loader.o \
 		  obj/hardwarecommunication/port.o \
 		  obj/hardwarecommunication/interruptstubs.o \
 		  obj/hardwarecommunication/interrupts.o \
+		  obj/hardwarecommunication/pci.o \
 		  obj/drivers/keyboard.o \
 		  obj/drivers/mouse.o \
+		  obj/drivers/vga.o \
 		  obj/kernel.o
-
-obj/%.o : source/%.cpp
-	mkdir -p $(@D)
-	g++ $(GPPPARAMS) -o $@ -c $<
-
-obj/%.o: source/%.s
-	mkdir -p $(@D)
-	as $(ASPARAMS) -o $@ $<
-
-mykernel.bin: linker.ld $(objects)
-	ld $(LDPARAMS) -T $< -o $@ $(objects)
-
-install: mykernel.bin
-	sudo cp $< /boot/mykernel.bin
 
 mykernel.iso: mykernel.bin
 	mkdir iso
@@ -41,6 +29,20 @@ mykernel.iso: mykernel.bin
 	echo '}' >> iso/boot/grub/grub.cfg
 	grub-mkrescue --output=$@ iso
 	rm -rf iso
+
+obj/%.o : source/%.cpp
+	mkdir -p $(@D)
+	g++ $(GPPPARAMS) -o $@ -c $<
+
+obj/%.o: source/%.s
+	mkdir -p $(@D)
+	as $(ASPARAMS) -o $@ $<
+
+mykernel.bin: linker.ld $(objects)
+	ld $(LDPARAMS) -T $< -o $@ $(objects)
+
+install: mykernel.bin
+	sudo cp $< /boot/mykernel.bin
 
 .PHONY: clean
 clean:
