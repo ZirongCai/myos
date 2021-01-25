@@ -85,11 +85,15 @@ Configuration reads and writes can be initiated from the CPU in two ways: one le
 
 A **Base Address Register(BAR)**: is used to:
 
+![](./pictures/BAR_map.png)
+
 - Memory mapping mode
 
 1. specify how much memory a device wants to be mapped into main memory, and
 
 2. after device enumeration, it holds the (base) address, where the mapped memory block begins.
+
+![](./pictures/BAR_IO.png)
 
 - I/O mode
 
