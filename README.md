@@ -61,6 +61,43 @@ http://www.lowlevel.eu/wiki/PIC_Tutorial
 
 http://www.lowlevel.eu/wiki/Programmable_Interrupt_Controller#Initialisierung
 
+### Peripheral Component Interconnect(PCI)
+
+http://www.lowlevel.eu/wiki/Peripheral_Component_Interconnect
+
+https://diego.assencio.com/?index=649b7a71b35fc7ad41e03b6d0e825f07
+
+https://en.wikipedia.org/wiki/PCI_configuration_space
+
+![](./pictures/mainboard.jpg)
+
+We can see from the picture that Devices like Keyboard/Mouse has a fixed Port. But unlike Keyboard and Mouse, there are some Devices that not every computer has. For example, Network Card, Sound Card and so on. But the operating system should allow the user to decide which devices they want to install in their Computer and no matter which device is used, the OS can still recognize it and use the right driver for this device. And that is PCI. From the picture we can see that PCI is just a port, but what is inserted in this port is decided by the user. So how does the OS recognize the device that is inserted?
+
+![](./pictures/pcifunc.png)
+
+There are totally 8 Buses for PCI, and for each bus, it allows 32 Devices, for each Devices, there can be 8 functions. So everytime when the computer is booted, The OS will iterate for all 8*32*8 functions and ask if there is any function here. Note that all devices are forced to at least have a function. For each function, there is an individual **configuration space**. 
+
+![](./pictures/conf_space.png)
+
+Every PCI device has a set of registers called the device's configuration space which, among other things, display the **device ID (DID)**, the **vendor ID (VID)** and the **device class** to the operational system. The constructure of configure space is showed in the picture above. These are just numeric codes which the operational system maps into human-readable names through a predefined table. Vendor IDs are assigned by a group of companies called the PCI Special Interest Group and device IDs are assigned by their respective vendors. With vendor ID, device id and device class, the OS is now capable to load a correspoding driver for this device. Up to here, automatic configuration is almost done. What remains is, how to communicate with PCI devices?
+
+Configuration reads and writes can be initiated from the CPU in two ways: one legacy method via I/O addresses 0xCF8 and 0xCFC, and another called memory-mapped configuration.
+
+A **Base Address Register(BAR)**: is used to:
+
+- Memory mapping mode
+
+1. specify how much memory a device wants to be mapped into main memory, and
+
+2. after device enumeration, it holds the (base) address, where the mapped memory block begins.
+
+- I/O mode
+
+1. specify the port number.
+
+
+
+
 
 ## ProblemCollection
 
