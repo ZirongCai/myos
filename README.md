@@ -87,7 +87,7 @@ A **Base Address Register(BAR)**: is used to:
 
 ![](./pictures/BAR_map.png)
 
-- Memory mapping mode
+- Memory mapping mode(a set of main memory is reserved by the device, and whenever the device want to send data to cpu or vice versa, it just write the data in this memory space)
 
 1. specify how much memory a device wants to be mapped into main memory, and
 
@@ -95,7 +95,7 @@ A **Base Address Register(BAR)**: is used to:
 
 ![](./pictures/BAR_IO.png)
 
-- I/O mode
+- I/O mode(a command port and a data port. If the cpu want to get the data of a device, it first write the Bus/Device/Function information and the offset of wanted register into the command port, and then it will get the information in data port)
 
 1. specify the port number.
 
@@ -105,7 +105,7 @@ A **Base Address Register(BAR)**: is used to:
 
 ## ProblemCollection
 
-- ***"asm volatile" and lgdt***
+- ***"asm volatile" and lgdt***(solved)
 ```
     asm volatile("lgdt (%0)": :"p" (((uint8_t *) i)+2));
 ```
@@ -127,7 +127,7 @@ int main(int argc, const char * argv[]) {
 }
 ```
 
-- ***Communicate with Pic***
+- ***Communicate with Pic***(solved)
 ```
 InterruptManager::InterruptManager(...)
 {
@@ -155,7 +155,7 @@ InterruptManager::InterruptManager(...)
 I think the function of this code is to initialize the PIC and tell the PIC not to ignore the interrupt signal but send them to the CPU, but i am not sure coz this problem is too hardware. (solved. see PIC)
 
 
-- ***Data packets of Mouse***
+- ***Data packets of Mouse***(solved)
 
 ![](./pictures/mouse_transmission.png)
 
@@ -184,13 +184,13 @@ It means when a mouse interrupt occurs, the processor will land in MouseDriver.H
 
 There is still one problem remain unsolved: In my opinion, an Interrupt signal can only forces the cpu to step into the Mouse Handle function once, which is absolutely wrong from the sight of the code(an Interrupt corresponds to 3 times function call), so maybe a mouse event will result in 3 interrupt impuls? 
 
-- ***extern keyword***
+- ***extern keyword***(solved)
 ![](./pictures/externKeyword.png)
 First of all, in a C/C++ programm, **function is valid everywhere!!**. e.g., a function **void f1();** is defined in main.c, it can also be used in file.c as long as they are linked together. Recall that functions are labels in assembly, which also explained this.
 
 What about variables?
 
-- ***difference between "" and ''***
+- ***difference between "" and ''***(solved)
 Double quotes is for string and single quotes for character. I have met an interesting bug because of this difference.
 
 ```
@@ -204,7 +204,7 @@ Double quotes is for string and single quotes for character. I have met an inter
 
 in the code above, i wrongly wrote **foo = "";**, and after that everytime i pressed a keyboard, it will print **key+Hello World**, because the end descriptor of a string '\0' is replaced by character c and thus printf won't stop reading memory. But what surprised me is that, right behind the character, is the memory for "Hello World" that used in **kernelMain**, i think it's stored in Stack, but ***will it not be deleted?***
 
-- ***Virtual Keyworad***
+- ***Virtual Keyworad***(solved)
 Rules for Virtual Functions
 
 1. Virtual functions cannot be static and also cannot be a friend function of another class.
@@ -267,7 +267,7 @@ Output:
 print derived class
 show base class
 ```
-- ***ifndef-define-endif***
+- ***ifndef-define-endif***(solved)
 https://en.wikipedia.org/wiki/Include_guard
 
 Those are called #include guards.
@@ -275,7 +275,7 @@ Once the header is included, it checks if a unique value (in this case HEADERFIL
 When the code is included again, the first ifndef fails, resulting in a blank file.
 That prevents double declaration of any identifiers such as types, enums and static variables.
 
-- ***include "" Vs. include <> ***
+- ***include "" Vs. include <> *** (solved)
 
 In practice, the difference is in the location where the preprocessor searches for the included file.
 
@@ -285,7 +285,7 @@ For #include "" the preprocessor searches first in the same directory as the fil
     
 Note: We use **-Iinclude** option in g++ so it will search the files in /include directory.
 
-- ***.extern and .global in aseembly***
+- ***.extern and .global in aseembly***(unsolved)
 
 The 'extern' directive tells the assembler that a particular label won't be found in the current source file and that is must be declared as a 'global' elsewhere. It's the job of the linker to resolve the connection between the reference to the extern label and its global declaration.
 
@@ -295,6 +295,33 @@ One big advantage to explicitly identifying global's and extern's is that you ca
 
 Question: In a C programm, if i define a function f1() in main.c, i can use it in other files like file1.c without using keyword global and extern, **because the compiler will link this two file together and so f1() is valid for all file in this programm, right?** But since we also link the interruptstus.s and kernel.cpp together, why muss we extern the Interrupthandler function in interruptstus.s ???
 
+- ***pci***(unsolved)
+
+```
+void PeripheralComponentInterconnectController::SelectDrivers(DriverManager* driverManager, InterruptManager* interrupts)
+{
+    for(int bus = 0; bus < 8; bus++)
+    {
+        for(int device = 0;device < 32; device++)
+        {
+             for(int function = 0; function < numFunctions; function++)
+            {
+                PeripheralComponentInterconnectDeviceDescriptor dev = GetDeviceDescriptor(bus, device, function);
+
+                for(int barNum = 0; barNum < 6; barNum++)//for every functions there's 6 bar???
+                {
+                    BaseAddressRegister bar = GetBaseAddressRegister(bus, device, function, barNum);
+                    if(bar.address && (bar.type == InputOutput))
+                    
+                        /* If there are multiple base address in the configuration space, what should be the portBase of this device? */
+                        dev.portBase = (uint32_t)bar.address;
+                }
+            }
+        }
+    }
+    ...
+}
+```
 
 
 
