@@ -7,6 +7,8 @@
 #include <drivers/mouse.h>
 #include <drivers/driver.h>
 #include <drivers/vga.h>
+#include <multitasking.h>
+#include <memorymanagement.h>
 
 using namespace myos;
 using namespace myos::common;
@@ -54,7 +56,7 @@ void printf(char* str)
 
 void printfHex(uint8_t c)
 {
-        char* foo = "0x00";
+        char* foo = "00";
         char* hex = "0123456789ABCDEF";
         foo[2] = hex[(c >> 4) & 0x0F];
         foo[3] = hex[c & 0x0F];
@@ -116,7 +118,17 @@ class MouseToConsole : public MouseEventHandler
     }   
 };
 
+void taskA()
+{
+    while(true)
+        printf("A");
+}
 
+void taskB()
+{
+    while(true)
+        printf("B");
+}
 
 
 extern "C" void kernelMain(void* multiboot_structure, uint32_t magicnumber)
@@ -125,7 +137,34 @@ extern "C" void kernelMain(void* multiboot_structure, uint32_t magicnumber)
 
 
     GlobalDescriptorTable gdt;
-    InterruptManager interrupts(&gdt);
+    
+    uint32_t* memupper = (uint32_t*)(((size_t)multiboot_structure) + 8);
+    size_t heap = 10*1024*1024;
+    MemoryManager memoryManager(heap, (*memupper)*1024 - heap - 10*1024);
+
+    printf("heap: 0x");
+    printfHex((heap >> 24) & 0xFF);
+    printfHex((heap >> 16) & 0xFF);
+    printfHex((heap >> 8 ) & 0xFF);
+    printfHex((heap      ) & 0xFF);
+
+    void* allocated = memoryManager.malloc(1024);
+    printf("\nallocated: 0x");
+    printfHex(((size_t)allocated >> 24) & 0xFF);
+    printfHex(((size_t)allocated >> 16) & 0xFF);
+    printfHex(((size_t)allocated >> 8 ) & 0xFF);
+    printfHex(((size_t)allocated      ) & 0xFF);
+    printf("\n");
+
+
+    TaskManager taskManager;
+    /*
+    Task task1(&gdt, taskA);
+    Task task2(&gdt, taskB);
+    taskManager.AddTask(&task1);
+    taskManager.AddTask(&task2);
+    */
+    InterruptManager interrupts(&gdt, &taskManager);
 
     printf("Initializing Hardware, Stage 1\n");
     DriverManager drvManager;
@@ -141,7 +180,6 @@ extern "C" void kernelMain(void* multiboot_structure, uint32_t magicnumber)
     PeripheralComponentInterconnectController PCIController;
     PCIController.SelectDrivers(&drvManager, &interrupts);
 
-    VideoGraphicsArray vga;
 
 
     printf("Initializing Hardware, Stage 2\n");
@@ -151,14 +189,6 @@ extern "C" void kernelMain(void* multiboot_structure, uint32_t magicnumber)
     interrupts.Activate();
 
 
-    vga.SetMode(320, 200, 8);
-    for(int32_t y = 0; y < 200; y++)
-    {
-        for(int32_t x = 0; x < 320; x++)
-        {
-            vga.PutPixel(x, y, 0x00, 0x00, 0xA8);
-        }
-    }
 
     while(1);
 }

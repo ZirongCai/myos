@@ -1,5 +1,6 @@
 
 #include <hardwarecommunication/interrupts.h>
+using namespace myos;
 using namespace myos::common;
 using namespace myos::hardwarecommunication;
 
@@ -58,12 +59,14 @@ void InterruptManager::SetInterruptDescriptorTableEntry(
 
 
 
-InterruptManager::InterruptManager(GlobalDescriptorTable* gdt)
+InterruptManager::InterruptManager(GlobalDescriptorTable* gdt, TaskManager* taskManager)
     : picMasterCommand(0x20),
     picMasterData(0x21),
     picSlaveCommand(0xA0),
     picSlaveData(0xA1)
 {
+    this->taskManager = taskManager;
+
     uint16_t CodeSegment = gdt->CodeSegmentSelector();
 
     const uint8_t IDT_INTERRUPT_GATE = 0xE;
@@ -148,6 +151,13 @@ uint32_t InterruptManager:: DoHandleInterrupt(uint8_t interruptNumber, uint32_t 
         printf("UNHANDLED INTERRUPT");
         printfHex(interruptNumber);
     }
+
+
+    if(interruptNumber == 0x20)
+    {
+        esp = (uint32_t)taskManager->Schedule((CPUState*)esp);
+    }
+
 
 
     if(0x20 <= interruptNumber && interruptNumber < 0x30)

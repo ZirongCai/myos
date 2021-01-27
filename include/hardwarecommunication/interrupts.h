@@ -7,6 +7,7 @@
 #include <common/types.h>
 #include <hardwarecommunication/port.h>
 #include <gdt.h>
+#include <multitasking.h>
 
 
 namespace myos
@@ -36,6 +37,7 @@ namespace myos
 
             static InterruptManager* ActiveInterruptManager;
             InterruptHandler* handlers[256];
+            TaskManager* taskManager;
 
             struct GateDescriptor
             {
@@ -66,7 +68,7 @@ namespace myos
 
             public:
 
-            InterruptManager(myos::GlobalDescriptorTable* gdt);
+            InterruptManager(myos::GlobalDescriptorTable* gdt, myos::TaskManager* taskManager);
             ~InterruptManager();
 
             void Activate();

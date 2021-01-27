@@ -19,6 +19,7 @@ _ZN4myos21hardwarecommunication16InterruptManager16HandleInterruptRequest\num\()
 .global _ZN4myos21hardwarecommunication16InterruptManager26HandleInterruptRequest\num\()Ev
 _ZN4myos21hardwarecommunication16InterruptManager26HandleInterruptRequest\num\()Ev:
     movb $\num + IRQ_BASE, (interruptnumber)
+    pushl $0
     jmp int_bottom
 .endm
 
@@ -30,24 +31,51 @@ HandleInterruptRequest 0x0C
 
 int_bottom:
 
-    pusha
-    pushl %ds #pushl:= push dword
-    pushl %es
-    pushl %fs
-    pushl %gs
+    #save registers
+    #pusha
+    #pushl %ds #pushl:= push dword
+    #pushl %es
+    #pushl %fs
+    #pushl %gs
 
-    pushl %esp;
+    pushl %ebp
+    pushl %edi
+    pushl %esi
+
+    pushl %edx
+    pushl %ecx
+    pushl %ebx
+    pushl %eax
+
+
+    #call C++ Handler
+    pushl %esp
     push (interruptnumber)
     call _ZN4myos21hardwarecommunication16InterruptManager15handleInterruptEhj
-    #addl $5, %esp; to delete the number from stack, but since we will overwrite the stack later so its not neccesarry.
-    movl %eax, %esp 
 
 
-    popl %gs
-    popl %fs
-    popl %es
-    popl %ds
-    popa
+    movl %eax, %esp #switch stack
+
+
+    #restore registers
+    popl %eax
+    popl %ebx
+    popl %ecx
+    popl %edx
+
+    popl %esi
+    popl %edi
+    popl %ebp
+
+    #popl %gs
+    #popl %fs
+    #popl %es
+    #popl %ds
+    #popa
+
+
+    add $4, %esp
+
 
 
 .global _ZN4myos21hardwarecommunication16InterruptManager22IgnoreInterruptRequestEv
