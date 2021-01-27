@@ -329,7 +329,34 @@ void PeripheralComponentInterconnectController::SelectDrivers(DriverManager* dri
 }
 ```
 
+- ***Scope***
 
+Variables defined in { }, is only valid in this area.
+
+```
+int main(void) {
+  char x = 'm';
+  printf("%c\n", x);
+  {
+    printf("%c\n", x);
+    char x = 'b';
+    printf("%c\n", x);
+  }
+  printf("%c\n", x);
+}
+```
+
+``` Output: m m b m```
+
+- ***static keyword***
+
+https://www.geeksforgeeks.org/static-keyword-cpp/
+
+Static keyword has different meanings when used with different types. We can use static keyword with:
+
+Static Variables : Variables in a function, Variables in a class
+
+Static Members of Class : Class objects and Functions in a class
 
 ## ToolTricks
 
