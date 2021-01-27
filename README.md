@@ -107,6 +107,10 @@ A **Base Address Register(BAR)**: is used to:
 But other registers like eax,ebx will not be stored. So we need to do it manually.
 
 
+### Dynamic Memory Management
+
+  We have already two types of variable: 1. Static Variable, whose lifetime (or "extent") is the entire run of the program ( Static Storage ), 2. Local Variable, a local variable is a variable that is given local scope( Stack ). But now, as a programmer, we want to define a variable that neither will be deleted outside the scope it's declared, nor exist til the end of the programm, but deleted whenever we want to. And that is why dynamic memory management is invented. A dynamic Variable will be allocated in Heap. 
+
 
 
 ## ProblemCollection
