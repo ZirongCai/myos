@@ -99,6 +99,12 @@ A **Base Address Register(BAR)**: is used to:
 
 1. specify the port number.
 
+### Multitasking
+
+Multitasking means a processor can prosess multiple task at same time. It **does not** mean that the processor can execute multiple code at same time, but that after prosesses task1, the processor can go back to the instruction of task2, where the processor was last time it leaves task2. For example, the processor is executing some code of safari, but at the next time interrupt, it may go back to wechet to check whether there is a new message or not, but the user can not be aware of. It's not hard to achieve this. We just reserve some space in ram for every task and store all the registers information in that space when the processor leaves this task.
+
+Note that everytime when the processor want to switch to other task, it will automatically push some registers in stack, such as eip(instruction pointer)...
+But other registers like eax,ebx will not be stored. So we need to do it manually.
 
 
 
