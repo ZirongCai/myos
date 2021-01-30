@@ -135,3 +135,4 @@ void operator delete[](void* ptr)
 {
     if(myos::MemoryManager::activeMemoryManager != 0)
         myos::MemoryManager::activeMemoryManager->free(ptr);
+}

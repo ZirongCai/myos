@@ -1,5 +1,6 @@
 
 #include <hardwarecommunication/pci.h>
+#include <drivers/amd_am79c973.h>
 using namespace myos::common;
 using namespace myos::hardwarecommunication;
 using namespace myos::drivers;
@@ -83,12 +84,13 @@ void PeripheralComponentInterconnectController::SelectDrivers(DriverManager* dri
                     BaseAddressRegister bar = GetBaseAddressRegister(bus, device, function, barNum);
                     if(bar.address && (bar.type == InputOutput))
                         dev.portBase = (uint32_t)bar.address;//? If there are multiple base address in the configuration space, what should be the portBase of this device?
-
-                    /* select a driver for every base address*/
-                    Driver* driver = GetDriver(dev, interrupts);
-                    if(driver != 0)
-                        driverManager->AddDriver(driver);
                 }
+
+                /* select a driver for every base address*/
+                Driver* driver = GetDriver(dev, interrupts);
+                if(driver != 0)
+                    driverManager->AddDriver(driver);
+
 
                 printf("PCI BUS ");
                 printfHex(bus & 0xFF);
@@ -109,6 +111,8 @@ void PeripheralComponentInterconnectController::SelectDrivers(DriverManager* dri
                 printf("\n");
 
             }
+
+
         }
     }
 
@@ -154,12 +158,18 @@ BaseAddressRegister PeripheralComponentInterconnectController::GetBaseAddressReg
 
 Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponentInterconnectDeviceDescriptor dev, InterruptManager* interrupts)
 {
+    Driver* driver = 0;
     switch(dev.vendor_id)
     {
         case 0x1022: // AMD
             switch(dev.device_id)
             {
                 case 0x2000: //am79c973
+                    printf("AMD am79c973 ");
+                    driver = (amd_am79c973*)MemoryManager::activeMemoryManager->malloc(sizeof(amd_am79c973));
+                    if(driver != 0)
+                        new (driver) amd_am79c973(&dev, interrupts);
+                    return driver;
                     break;
             }
             break;

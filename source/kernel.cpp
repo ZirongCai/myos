@@ -56,7 +56,7 @@ void printf(char* str)
 
 void printfHex(uint8_t c)
 {
-        char* foo = "00";
+        char* foo = "0x00";
         char* hex = "0123456789ABCDEF";
         foo[2] = hex[(c >> 4) & 0x0F];
         foo[3] = hex[c & 0x0F];
@@ -148,6 +148,7 @@ extern "C" void kernelMain(void* multiboot_structure, uint32_t magicnumber)
     printfHex((heap >> 8 ) & 0xFF);
     printfHex((heap      ) & 0xFF);
 
+    /*
     void* allocated = memoryManager.malloc(1024);
     printf("\nallocated: 0x");
     printfHex(((size_t)allocated >> 24) & 0xFF);
@@ -155,6 +156,7 @@ extern "C" void kernelMain(void* multiboot_structure, uint32_t magicnumber)
     printfHex(((size_t)allocated >> 8 ) & 0xFF);
     printfHex(((size_t)allocated      ) & 0xFF);
     printf("\n");
+    */
 
 
     TaskManager taskManager;
@@ -164,7 +166,7 @@ extern "C" void kernelMain(void* multiboot_structure, uint32_t magicnumber)
     taskManager.AddTask(&task1);
     taskManager.AddTask(&task2);
     */
-    InterruptManager interrupts(&gdt, &taskManager);
+    InterruptManager interrupts(0x20, &gdt, &taskManager);
 
     printf("Initializing Hardware, Stage 1\n");
     DriverManager drvManager;
