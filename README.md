@@ -387,6 +387,10 @@ int main(void) {
 ```
 
 
+- ***try and catch***
+
+  https://www.cnblogs.com/QG-whz/p/5136883.html
+
 ## ToolTricks
 
 - ***tricks of git***
