@@ -364,6 +364,27 @@ int main(void) {
    Static Variables : Variables in a function, Variables in a class
 
    Static Members of Class : Class objects and Functions in a class
+   
+- ***new vs. mallloc***
+  
+  https://www.cnblogs.com/qg-whz/p/5140930.html
+  
+  https://www.cnblogs.com/QG-whz/p/5060894.html
+  
+  
+   Feature                  | new/delete                     | malloc/free                   
+--------------------------+--------------------------------+-------------------------------
+ Memory allocated from    | 'Free Store'                   | 'Heap'                        
+ Returns                  | Fully typed pointer            | void*                         
+ On failure               | Throws (never returns NULL)    | Returns NULL                  
+ Required size            | Calculated by compiler         | Must be specified in bytes    
+ Handling arrays          | Has an explicit version        | Requires manual calculations  
+ Reallocating             | Not handled intuitively        | Simple (no copy constructor)  
+ Call of reverse          | Implementation defined         | No                            
+ Low memory cases         | Can add a new memory allocator | Not handled by user code      
+ Overridable              | Yes                            | No                            
+ Use of (con-)/destructor | Yes                            | No                            
+
 
 ## ToolTricks
 
