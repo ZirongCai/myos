@@ -370,9 +370,9 @@ int main(void) {
   https://www.cnblogs.com/qg-whz/p/5140930.html
   
   https://www.cnblogs.com/QG-whz/p/5060894.html
-  
-  
-   Feature                  | new/delete                     | malloc/free                   
+
+```
+ Feature                  | new/delete                     | malloc/free                   
 --------------------------+--------------------------------+-------------------------------
  Memory allocated from    | 'Free Store'                   | 'Heap'                        
  Returns                  | Fully typed pointer            | void*                         
@@ -384,6 +384,7 @@ int main(void) {
  Low memory cases         | Can add a new memory allocator | Not handled by user code      
  Overridable              | Yes                            | No                            
  Use of (con-)/destructor | Yes                            | No                            
+```
 
 
 ## ToolTricks
