@@ -19,7 +19,7 @@ TODO: Put more badges here.
 
 ### Constructure
 
-![](./pictures/Myos.png)
+![](./pictures/Myos1.png)
 
 ### Global Descriptor Table
 
