@@ -51,13 +51,14 @@ namespace myos
 
 
             BufferDescriptor* sendBufferDescr;
-            common::uint8_t sendBufferDescrMemory[2048+15];
-            common::uint8_t sendBuffers[2*1024+15][8];
+            /* 8 buffer totally, for each buffer there's a descriptor*/
+            common::uint8_t sendBufferDescrMemory[2048+15]; //why 2048?? 8 Descriptor with each 16byte is just 128 byte.
+            common::uint8_t sendBuffers[8][2*1024+15];
             common::uint8_t currentSendBuffer;
 
             BufferDescriptor* recvBufferDescr;
             common::uint8_t recvBufferDescrMemory[2048+15];
-            common::uint8_t recvBuffers[2*1024+15][8];
+            common::uint8_t recvBuffers[8][2*1024+15];
             common::uint8_t currentRecvBuffer;
 
 
@@ -67,6 +68,9 @@ namespace myos
 
             void Activate();
             int Reset();
+
+            void Send(common::uint8_t* buffer, int count);
+            void Receive();
             common::uint32_t HandleInterrupt(common::uint32_t esp);
 
 
