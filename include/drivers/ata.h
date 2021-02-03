@@ -26,7 +26,7 @@ namespace myos
             hardwarecommunication::Port8Bit controlPort;
         public:
             
-            AdvancedTechnologyAttachment(bool master, common::uint16_t portBase);
+            AdvancedTechnologyAttachment(common::uint16_t portBase, bool master);
             ~AdvancedTechnologyAttachment();
             
             void Identify();

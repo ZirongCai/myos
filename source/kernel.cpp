@@ -10,6 +10,7 @@
 #include <multitasking.h>
 #include <memorymanagement.h>
 #include <drivers/ata.h>
+#include <syscalls.h>
 
 using namespace myos;
 using namespace myos::common;
@@ -119,17 +120,23 @@ class MouseToConsole : public MouseEventHandler
     }   
 };
 
+void sysprintf(char* str)
+{
+    asm("int $0x80" : : "a" (4), "b" (str));
+}
+
 void taskA()
 {
     while(true)
-        printf("A");
+        sysprintf("A");
 }
 
 void taskB()
 {
     while(true)
-        printf("B");
+        sysprintf("B");
 }
+
 
 
 extern "C" void kernelMain(void* multiboot_structure, uint32_t magicnumber)
@@ -161,13 +168,14 @@ extern "C" void kernelMain(void* multiboot_structure, uint32_t magicnumber)
 
 
     TaskManager taskManager;
-    /*
+
     Task task1(&gdt, taskA);
     Task task2(&gdt, taskB);
     taskManager.AddTask(&task1);
     taskManager.AddTask(&task2);
-    */
+
     InterruptManager interrupts(0x20, &gdt, &taskManager);
+    SyscallHandler syscalls(&interrupts, 0x80);
 
     printf("Initializing Hardware, Stage 1\n");
     DriverManager drvManager;
@@ -205,6 +213,7 @@ extern "C" void kernelMain(void* multiboot_structure, uint32_t magicnumber)
 
     char* readbuffer = " ";
     ata0s.Read28(0,16);
+
 
 
     interrupts.Activate();
