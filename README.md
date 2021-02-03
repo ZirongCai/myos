@@ -19,7 +19,7 @@ TODO: Put more badges here.
 
 ### Constructure
 
-![](./pictures/Myos.png)
+![](./pictures/Myos1.png)
 
 ### Global Descriptor Table
 
@@ -110,6 +110,16 @@ But other registers like eax,ebx will not be stored. So we need to do it manuall
 ### Dynamic Memory Management
 
   We have already two types of variable: 1. Static Variable, whose lifetime (or "extent") is the entire run of the program ( Static Storage ), 2. Local Variable, a local variable is a variable that is given local scope( Stack ). But now, as a programmer, we want to define a variable that neither will be deleted outside the scope it's declared, nor exist til the end of the programm, but deleted whenever we want to. And that is why dynamic memory management is invented. A dynamic Variable will be allocated in Heap. 
+  
+### Network Card
+
+### Hard Drives
+
+### System Calls
+
+In computing, a system call (commonly abbreviated to syscall) is the programmatic way in which a computer program requests a service from the kernel of the operating system on which it is executed. This may include hardware-related services (for example, accessing a hard disk drive), creation and execution of new processes, and communication with integral kernel services such as process scheduling. System calls provide an essential interface between a process and the operating system.
+
+But why a program can't use the system resources? I mean, it's just some code like **asm("outb %0, %1" : : ...)**. The answer is here : https://www.zhihu.com/question/355721858(i only found chinese answer :( ). At the beginning, there is no such kernel space and user space. As time goes, more and more PCs should be able to access multiple tasks and should be able to used by different users. And thus, the CPU manufacturer has invented a new CPU which has two different model, namely kernel model and user model. The OS is running on kernel model which has more Authority. All program is running on user kernel which almost has no Authority to the hardwares. Thus, the operating system should offer an API to programs such that they can access the hardware resources like file read/write. And that API is called system calls!
 
 
 
@@ -390,6 +400,10 @@ int main(void) {
 - ***try and catch***
 
   https://www.cnblogs.com/QG-whz/p/5136883.html
+  
+- ***array***
+
+![](./pictures/array.png)
 
 ## ToolTricks
 
