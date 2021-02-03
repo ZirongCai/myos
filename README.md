@@ -19,7 +19,11 @@ TODO: Put more badges here.
 
 ### Constructure
 
-![](./pictures/Myos1.png)
+1 for public functions.(aka, API)
+
+9 for private functions/parameters.
+
+![](./pictures/Myos.png)
 
 ### Global Descriptor Table
 
