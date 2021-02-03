@@ -16,6 +16,7 @@ objects = obj/loader.o \
 		  obj/drivers/mouse.o \
 		  obj/drivers/vga.o \
 		  obj/drivers/amd_am79c973.o \
+		  obj/drivers/ata.o \
 		  obj/kernel.o
 
 mykernel.iso: mykernel.bin

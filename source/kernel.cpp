@@ -9,6 +9,7 @@
 #include <drivers/vga.h>
 #include <multitasking.h>
 #include <memorymanagement.h>
+#include <drivers/ata.h>
 
 using namespace myos;
 using namespace myos::common;
@@ -188,6 +189,24 @@ extern "C" void kernelMain(void* multiboot_structure, uint32_t magicnumber)
     drvManager.ActivateAll();
 
     printf("Initializing Hardware, Stage 3\n");
+
+    //interrupt 14
+    AdvancedTechnologyAttachment ata0m(0x1F0, true);
+    printf("ATA Primary Master: ");
+    ata0m.Identify();
+
+    AdvancedTechnologyAttachment ata0s(0x1F0, false);
+    printf("ATA Primary Slave: ");
+    ata0s.Identify();
+
+    char* atabuffer = "Hello Hard drive";
+    ata0s.Write28(0,(uint8_t*)atabuffer,16);
+    ata0s.Flush();
+
+    char* readbuffer = " ";
+    ata0s.Read28(0,16);
+
+
     interrupts.Activate();
 
 
