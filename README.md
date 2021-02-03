@@ -397,7 +397,7 @@ int main(void) {
   
 - ***array***
 
-![](./pictures/array.jpeg)
+![](./pictures/array.png)
 
 ## ToolTricks
 
