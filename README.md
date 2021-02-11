@@ -411,6 +411,10 @@ int main(void) {
 
 ## ToolTricks
 
+- *** good code habbits***
+
+  https://www.cnblogs.com/QG-whz/p/5517643.html
+
 - ***tricks of git***
 
 Book:http://git-scm.com/book/en/v2
